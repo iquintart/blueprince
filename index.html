@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Blue Prince Club</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b2b33">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Blue Prince">
+<meta name="description" content="Pide tus mojitos y NOT-jitos de 1,2 L. Abierto jueves, viernes y sábado en Santiago.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: carrete de verano, cercano, rápido de usar en el celular
+   IDEA: la pantalla del pedido como la barra del club: eliges, armas tu pack y lo mandas por WhatsApp
+   PICTURE: el formulario mismo, con un ticket en vivo que muestra el total
+   COLOUR and TYPE: noche de piscina (#0b2b33), rosado neón #ff66c4, lima #c1ff72; Pacifico para la marca, Outfit para todo lo demás
+   LAYOUT: una columna tranquila; el ticket se pega abajo en el celular y al lado en pantallas anchas */
+:root{color-scheme:light dark;
+--bg:light-dark(#f3fbf8,#0b2b33);--card:light-dark(#ffffff,#103a44);--ink:light-dark(#0d2a30,#f2fff6);
+--soft:light-dark(#4d6b70,#a9c9c9);--line:light-dark(#d4e6e3,#1f5360);--pink:#ff4fb8;--lime:light-dark(#3f8f00,#c1ff72);--chip:light-dark(#e8f5f1,#0e323b)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Outfit,system-ui,sans-serif;overflow-x:clip}
+header{padding:calc(28px + env(safe-area-inset-top)) max(5vw,16px) 18px;background:linear-gradient(160deg,#0b2b33 0%,#0f4a57 60%,#14707e 100%);color:#f2fff6}
+.brand{font:400 clamp(34px,7vw,52px)/1.05 Pacifico,cursive;color:#ff66c4;margin:0}
+.sub{margin:6px 0 0;color:#c1ff72;font-weight:600}
+.hours{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.hours span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:4px 12px;font-size:14px;white-space:nowrap}
+main{max-width:1100px;margin:0 auto;padding:20px max(4vw,14px) 140px;display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){main{grid-template-columns:minmax(0,1fr) 340px;padding-bottom:40px}}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+h2{font-size:20px;margin:0 0 12px;line-height:1.2}
+.hint{color:var(--soft);font-size:14px;margin:4px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--chip);color:var(--ink);border-radius:14px;padding:8px 12px;min-height:44px;font:600 15px Outfit,sans-serif;cursor:pointer;text-align:left}
+.chip small{display:block;font-weight:400;color:var(--soft);font-size:13px}
+.chip:disabled{opacity:.45;cursor:not-allowed}
+.chip[aria-pressed=true]{border-color:var(--pink);background:color-mix(in srgb,var(--pink) 14%,var(--card))}
+.chip:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.btn:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.packs{display:grid;gap:10px}
+.pack{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.pack select{flex:1 1 130px;width:auto}
+.pack .ty{flex:1 1 100%}
+.pack b{font-size:14px;color:var(--soft);white-space:nowrap;flex:1 1 auto}
+.pack .split{flex:1 1 100%;margin-top:2px;font-size:14px}
+.pack .pp{font-weight:800;white-space:nowrap}
+select,input,textarea{width:100%;font:16px Outfit,sans-serif;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px;min-height:44px}
+.x{border:0;background:none;color:var(--soft);font-size:22px;width:44px;height:44px;cursor:pointer;border-radius:10px}
+.add{margin-top:10px;border:2px dashed var(--line);background:none;color:var(--ink);border-radius:12px;min-height:44px;width:100%;font:600 15px Outfit,sans-serif;cursor:pointer}
+label{display:block;font-weight:600;font-size:15px;margin:12px 0 4px}
+.row2{display:grid;gap:0 12px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:600px){.row2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin-top:14px}
+.check input{width:22px;height:22px;min-height:0;flex:none;margin-top:2px}
+aside{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:2px solid var(--pink);padding:12px max(4vw,14px) calc(12px + env(safe-area-inset-bottom));z-index:5}
+@media(min-width:900px){aside{position:sticky;top:16px;align-self:start;border:2px solid var(--pink);border-radius:18px;padding:18px}}
+.tk{display:none}
+@media(min-width:900px){.tk{display:block}}
+.tk p{margin:4px 0;display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.tk p span:last-child{white-space:nowrap;text-align:right}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:6px 0 10px}
+.total strong{font-size:28px;white-space:nowrap}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;border-radius:14px;border:0;background:#25d366;color:#05301a;font:800 17px Outfit,sans-serif;text-decoration:none;cursor:pointer}
+.btn[aria-disabled=true]{background:var(--line);color:var(--soft);pointer-events:none}
+.ghost{background:none;border:1.5px solid var(--line);color:var(--ink);margin-top:8px;min-height:44px;font-weight:600;font-size:15px}
+.install{display:none;align-items:center;gap:12px;background:#ff4fb8;color:#fff;padding:10px max(4vw,14px);font-weight:600;font-size:15px}
+.install.on{display:flex}
+.install span{flex:1}
+.install button{border:0;border-radius:10px;min-height:40px;padding:0 14px;font:700 15px Outfit,sans-serif;cursor:pointer}
+.install .go{background:#fff;color:#c2187a}
+.install .no{background:transparent;color:#fff;font-size:20px}
+.err{color:var(--pink);font-size:14px;margin:6px 0 0;min-height:1em}
+.how{font-size:14px;color:var(--soft);margin:0;padding-left:18px}
+.how li{margin:4px 0}
+.note{font-size:13px;color:var(--soft);margin-top:10px}
+@media(prefers-reduced-motion:no-preference){.chip{transition:border-color .15s,background .15s}}
+</style>
+</head>
+<body>
+<header>
+  <h1 class="brand">Blue Prince Club</h1>
+  <p class="sub">Mojitos 100% fruta · potes de 1,2 litros</p>
+  <div class="hours"><span>Abrimos jueves, viernes y sábado</span><span>2 potes $16.000</span><span>Jueves de Club 2 × $15.000</span><span>3 NOT-jitos sin alcohol $20.000</span><span>🎉 Pack Fiesta 6 + 1 de regalo $48.000</span><span>Despachos desde las 19:30 · sáb desde las 14:00</span></div>
+</header>
+<div class="install" id="install" role="region" aria-label="Instalar app">
+  <span id="installTxt">Instala Blue Prince en tu teléfono y pide en 2 toques.</span>
+  <button class="go" id="installBtn" type="button">Instalar</button>
+  <button class="no" id="installNo" type="button" aria-label="Cerrar">×</button>
+</div>
+<main>
+  <div style="display:grid;gap:22px">
+    <section>
+      <h2>1. ¿Qué día lo quieres?</h2>
+      <div class="chips" id="days"></div>
+      <h2 style="margin-top:18px">Despacho</h2>
+      <div class="chips" id="slots"></div>
+      <p class="hint">Jueves y viernes salimos a las 19:30 y 21:00 · sábado a las 14:00, 18:00 y 21:00. Pide hasta 1 hora antes de cada salida.</p>
+    </section>
+    <section>
+      <h2>2. Arma tu pedido</h2>
+      <p class="hint" style="margin:-6px 0 12px">Potes de 1,2 L. Lo que conviene: pack de 2 mojitos o pack de 3 NOT-jitos (sin alcohol). También vendemos la unidad.</p>
+      <div class="packs" id="packs"></div>
+      <button class="add" id="addPack" type="button">+ Agregar otro producto</button>
+    </section>
+    <section>
+      <h2>3. ¿Cómo lo recibes?</h2>
+      <div class="chips" id="modes"></div>
+      <p class="hint" id="modeHint"></p>
+      <div id="addr">
+        <div class="row2">
+          <div><label for="dir">Dirección</label><input id="dir" autocomplete="street-address" placeholder="Calle, número, depto"></div>
+          <div><label for="comuna">Comuna</label><select id="comuna"></select></div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>4. Tus datos</h2>
+      <div class="row2">
+        <div><label for="nom">Nombre</label><input id="nom" autocomplete="name"></div>
+        <div><label for="obs">Comentario (opcional)</label><input id="obs" placeholder="Ej: tocar timbre 2B"></div>
+      </div>
+      <label for="mail">Correo</label><input id="mail" type="email" autocomplete="email" inputmode="email" placeholder="tucorreo@ejemplo.cl">
+      <label class="check"><input type="checkbox" id="promo"> <span>Quiero recibir promociones y novedades de Blue Prince por correo y WhatsApp (puedes darte de baja cuando quieras).</span></label>
+      <label for="src">¿Cómo nos conociste? (opcional)</label>
+      <select id="src"><option value="">Elige una opción</option><option>Publicidad en Instagram</option><option>Historias / perfil de Instagram</option><option>Un amigo me recomendó</option><option>Ya era cliente</option><option>Otro</option></select>
+      <label class="check" id="ageRow"><input type="checkbox" id="age"> <span>Confirmo que soy mayor de 18 años.</span></label>
+    </section>
+  </div>
+  <aside>
+    <div class="tk" id="ticket"></div>
+    <div class="total"><span id="totLabel">Total productos</span><strong id="tot">$0</strong></div>
+    <a class="btn" id="send" target="_blank" rel="noopener" aria-disabled="true">Enviar pedido por WhatsApp</a>
+    <p class="err" id="err"></p>
+    <div class="tk">
+      <button class="btn ghost" id="copy" type="button">Copiar pedido</button>
+      <ol class="how">
+        <li>Envías el pedido por WhatsApp.</li>
+        <li>Te confirmamos cupo y, si corresponde, el valor del envío.</li>
+        <li>Transfieres el total y lo despachamos en el horario elegido.</li>
+      </ol>
+      <p class="note">WhatsApp +56 9 5660 8461 · Mojitos con alcohol solo para mayores de 18 años.</p>
+    </div>
+  </aside>
+</main>
+<script>
+{
+const WA='56956608461';
+const FLAVORS=['Tradicional','Mango','Maracuyá','Frambuesa','Blue','Chirimoya'];
+const WEEK_SLOTS=['19:30','21:00'],SAT_SLOTS=['14:00','18:00','21:00'],CUTOFF_MIN=60;
+const COMUNAS=['Santiago Centro','Independencia','Recoleta','Quinta Normal','Estación Central','Renca','Conchalí','Cerro Navia','Lo Prado','Huechuraba','Providencia','Ñuñoa','Otra'];
+const MODES=[
+ {id:'retiro',t:'Retiro gratis',s:'En Parque Los Reyes',h:'Te enviamos el punto exacto por WhatsApp. Sin costo de envío.'},
+ {id:'propio',t:'Pido mi Uber',s:'Tú lo pides en tu app',h:'Pides Uber Flash/Envíos con retiro en nuestro punto. El envío lo pagas directo en tu app.'},
+ {id:'cotiza',t:'Cotízame el envío',s:'Te mandamos el valor',h:'Cotizamos el Uber a tu dirección y te enviamos el valor exacto antes de que pagues.'}
+];
+const REOPEN='2026-11-30';
+const PRODUCTS={
+ m2:{label:'Pack 2 mojitos',short:'2 mojitos',n:2,alc:true,price:d=>d},
+ n3:{label:'Pack 3 NOT-jitos (sin alcohol) · $20.000',short:'3 NOT-jitos',n:3,alc:false,price:()=>20000},
+ m1:{label:'1 mojito · $10.000',short:'1 mojito',n:1,alc:true,price:()=>10000},
+ n1:{label:'1 NOT-jito (sin alcohol) · $8.000',short:'1 NOT-jito',n:1,alc:false,price:()=>8000},
+ pf:{label:'🎉 Pack Fiesta: 6 mojitos + 1 NOT-jito de regalo · $48.000',short:'Pack Fiesta (6 mojitos + 1 NOT-jito de regalo)',n:7,alc:true,price:()=>48000,until:'2027-01-03'}};
+const availFor=(k,day)=>!PRODUCTS[k].until||!day||day.k<=PRODUCTS[k].until;
+const itemPrice=(price,p)=>PRODUCTS[p[0]].price(price);
+const hasAlcohol=()=>st.packs.some(p=>PRODUCTS[p[0]].alc);
+const fit=(p)=>{const n=PRODUCTS[p[0]].n;const f=p.slice(1,1+n);while(f.length<n)f.push('Tradicional');return [p[0],...f]};
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],DIA=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const clp=n=>'$'+n.toLocaleString('es-CL');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function buildDays(){
+  const out=[],now=new Date();now.setHours(0,0,0,0);
+  const start=new Date(Math.max(now,new Date(2026,10,30)));
+  for(let i=0;i<21&&out.length<7;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);const k=iso(d),w=d.getDay();
+    if(k===REOPEN)out.push({k,date:d,label:'Lun 30 nov',note:'Reapertura · 2 × $15.000',price:15000,slots:WEEK_SLOTS});
+    else if(w>=4&&w<=6)out.push({k,date:d,label:DIA[w]+' '+d.getDate()+' '+MES[d.getMonth()],note:w===4?'Jueves de Club · 2 × $15.000':'2 × $16.000',price:w===4?15000:16000,slots:w===6?SAT_SLOTS:WEEK_SLOTS});
+  }
+  return out;
+}
+function openSlots(day){
+  if(!day)return [];
+  const now=new Date();
+  return day.slots.map(t=>{const [h,m]=t.split(':').map(Number);const at=new Date(day.date);at.setHours(h,m,0,0);
+    return {k:t,label:t,dis:at-now<CUTOFF_MIN*60000}});
+}
+let days=buildDays().filter(d=>openSlots(d).some(x=>!x.dis));
+const st={day:days[0]?.k||'',slot:'',mode:'',packs:[['m2','Tradicional','Mango']]};
+try{const s=JSON.parse(localStorage.getItem('bp-datos')||'{}');for(const id of ['nom','dir','comuna','mail'])if(s[id])document.getElementById(id).value=s[id]}catch(e){}
+const $=id=>document.getElementById(id);
+$('comuna').innerHTML='<option value="">Elige tu comuna</option>'+COMUNAS.map(c=>`<option>${esc(c)}</option>`).join('');
+try{const s=JSON.parse(localStorage.getItem('bp-datos')||'{}');if(s.comuna)$('comuna').value=s.comuna}catch(e){}
+function chips(el,items,cur,key){
+  el.innerHTML=items.map(it=>`<button type="button" class="chip" data-k="${esc(it.k)}" aria-pressed="${it.k===cur}"${it.dis?' disabled':''}>${esc(it.label)}${it.note?`<small>${esc(it.note)}</small>`:''}${it.dis?'<small>Cerrado</small>':''}</button>`).join('');
+  el.onclick=e=>{const b=e.target.closest('.chip');if(!b||b.disabled)return;st[key]=b.dataset.k;render()};
+}
+function packsUI(){
+  const opts=f=>FLAVORS.map(x=>`<option${x===f?' selected':''}>${esc(x)}</option>`).join('');
+  const day=days.find(d=>d.k===st.day),price=day?day.price:16000;
+  const tops=t=>Object.entries(PRODUCTS).filter(([k])=>availFor(k,day)||k===t).map(([k,v])=>`<option value="${k}"${k===t?' selected':''}>${esc(k==='m2'?v.label+' · '+clp(price):v.label)}</option>`).join('');
+  $('packs').innerHTML=st.packs.map((p,i)=>`<div class="pack"><b>Producto ${i+1}</b><span class="pp">${clp(itemPrice(price,p))}</span>
+   <button type="button" class="x" data-del="${i}" aria-label="Quitar producto ${i+1}" ${st.packs.length<2?'disabled style="visibility:hidden"':''}>×</button>
+   <select class="ty" aria-label="Producto ${i+1}" data-i="${i}" data-j="0">${tops(p[0])}</select>
+   ${p.slice(1).map((f,j)=>`${p[0]==='pf'&&j===6?'<b>Regalo NOT-jito:</b>':''}<select aria-label="Producto ${i+1}, pote ${j+1}${p[0]==='pf'&&j===6?' (regalo NOT-jito)':''}" data-i="${i}" data-j="${j+1}">${opts(f)}</select>`).join('')}
+   ${p[0]==='m2'?`<label class="check split"><input type="checkbox" data-split="${i}"${p.split?' checked':''}> <span>Dividir: 1 pote ahora y 1 la próxima semana (mismo precio; solo se suma el envío de la 2ª entrega)</span></label>`:''}</div>`).join('');
+}
+$('packs').addEventListener('change',e=>{const s=e.target;if(s.dataset.split!=null){st.packs[+s.dataset.split].split=s.checked;render(false);return}if(s.dataset.i==null)return;const i=+s.dataset.i;st.packs[i][s.dataset.j]=s.value;if(s.dataset.j==='0')st.packs[i]=fit(st.packs[i]);render(s.dataset.j==='0')});
+$('packs').addEventListener('click',e=>{const b=e.target.closest('[data-del]');if(!b)return;st.packs.splice(+b.dataset.del,1);render()});
+$('addPack').onclick=()=>{if(st.packs.length<8){st.packs.push(['m2','Tradicional','Tradicional']);render()}};
+for(const id of ['nom','dir','comuna','obs','age','src','mail','promo'])$(id).addEventListener('input',()=>render(false));
+function message(day,price){
+  const m=MODES.find(x=>x.id===st.mode);
+  const lines=['Hola Blue Prince! 🍸 Quiero hacer un pedido:','',
+   `📅 ${day.label} · despacho ${st.slot}`,
+   ...st.packs.map(p=>`🥤 ${PRODUCTS[p[0]].short}: ${p.slice(1).join(' + ')} (${clp(itemPrice(price,p))})`+(p.split?`\n   ↪ Dividido: ${p[1]} ahora y ${p[2]} la próxima semana`:'')),
+   `💰 Productos: ${clp(st.packs.reduce((a,p)=>a+itemPrice(price,p),0))}`,
+   `🛵 Entrega: ${m.t}`];
+  if(st.mode!=='retiro')lines.push(`📍 ${$('dir').value.trim()}, ${$('comuna').value}`);
+  if(st.mode==='cotiza')lines.push('Por favor cotízame el envío antes de transferir.');
+  lines.push(`👤 ${$('nom').value.trim()}`);
+  lines.push(`✉️ ${$('mail').value.trim()}${$('promo').checked?' (acepta promociones)':' (sin promociones)'}`);
+  if($('obs').value.trim())lines.push(`📝 ${$('obs').value.trim()}`);
+  if($('src').value)lines.push(`📣 Nos conoció por: ${$('src').value}`);
+  return lines.join('\n');
+}
+function render(full=true){
+  const cd=days.find(d=>d.k===st.day);
+  st.packs=st.packs.map(p=>availFor(p[0],cd)?p:fit(['m2',...p.slice(1)]));
+  if(st.slot&&!openSlots(cd).some(x=>x.k===st.slot&&!x.dis))st.slot='';
+  if(full){
+    chips($('days'),days,st.day,'day');
+    chips($('slots'),openSlots(cd),st.slot,'slot');
+    chips($('modes'),MODES.map(m=>({k:m.id,label:m.t,note:m.s})),st.mode,'mode');
+    packsUI();
+  }
+  const day=days.find(d=>d.k===st.day),m=MODES.find(x=>x.id===st.mode),price=day?day.price:16000;
+  $('modeHint').textContent=m?m.h:'Elige una opción.';
+  $('addr').style.display=st.mode&&st.mode!=='retiro'?'block':'none';
+  const sub=st.packs.reduce((a,p)=>a+itemPrice(price,p),0);
+  $('ageRow').style.display=hasAlcohol()?'flex':'none';
+  $('tot').textContent=clp(sub);
+  $('totLabel').textContent=st.mode==='retiro'||!st.mode?'Total':'Total + envío';
+  const split=st.packs.some(p=>p.split);
+  const envio=!m?'—':m.id==='retiro'?'$0':(m.id==='propio'?'Lo pagas en tu app':'Te lo cotizamos')+(split?' (× 2 entregas)':'');
+  $('ticket').innerHTML=`<h2>Tu pedido</h2><p><span>${day?esc(day.label):'Elige día'}</span><span>${esc(st.slot||'—')}</span></p>`+
+    st.packs.map(p=>`<p><span>${esc(PRODUCTS[p[0]].short)}: ${esc(p.slice(1).join(' + '))}${p.split?' · 2 entregas':''}</span><span>${clp(itemPrice(price,p))}</span></p>`).join('')+
+    `<p><span>Envío</span><span>${esc(envio)}</span></p>`;
+  const miss=[];
+  if(!day)miss.push('día');if(!st.slot)miss.push('horario');if(!m)miss.push('forma de entrega');
+  if(m&&m.id!=='retiro'&&(!$('dir').value.trim()||!$('comuna').value))miss.push('dirección y comuna');
+  if(!$('nom').value.trim())miss.push('nombre');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($('mail').value.trim()))miss.push('correo válido');if(hasAlcohol()&&!$('age').checked)miss.push('confirmar mayoría de edad');
+  $('err').textContent=miss.length?'Falta: '+miss.join(', '):'';
+  const a=$('send');
+  if(miss.length){a.setAttribute('aria-disabled','true');a.removeAttribute('href')}
+  else{a.setAttribute('aria-disabled','false');a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(message(day,price))}
+  try{localStorage.setItem('bp-datos',JSON.stringify({nom:$('nom').value,dir:$('dir').value,comuna:$('comuna').value,mail:$('mail').value}))}catch(e){}
+}
+$('copy').onclick=async()=>{const day=days.find(d=>d.k===st.day);if(!day||!st.mode||!st.slot){$('err').textContent='Completa día, horario y entrega para copiar.';return}
+  try{await navigator.clipboard.writeText(message(day,day.price));$('copy').textContent='Pedido copiado ✓'}catch(e){$('copy').textContent='No se pudo copiar'}};
+render();
+}
+</script>
+<script>
+{
+const bar=document.getElementById('install'),btn=document.getElementById('installBtn'),txt=document.getElementById('installTxt');
+const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+let dismissed=false;try{dismissed=localStorage.getItem('bp-install-no')==='1'}catch(e){}
+let deferred=null;
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;if(!standalone&&!dismissed){bar.classList.add('on')}});
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+if(isIOS&&!standalone&&!dismissed){txt.textContent='Instala la app: toca Compartir ⬆️ y luego "Agregar a inicio".';btn.style.display='none';bar.classList.add('on')}
+btn.addEventListener('click',async()=>{if(!deferred)return;deferred.prompt();try{await deferred.userChoice}catch(e){}deferred=null;bar.classList.remove('on')});
+document.getElementById('installNo').addEventListener('click',()=>{bar.classList.remove('on');try{localStorage.setItem('bp-install-no','1')}catch(e){}});
+window.addEventListener('appinstalled',()=>bar.classList.remove('on'));
+}
+</script>
+</body>
+</html>
